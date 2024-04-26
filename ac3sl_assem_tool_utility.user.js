@@ -36,11 +36,6 @@
         templateInsertTarget
     );
 
-    function loadHash(form, hash) {
-        form.editCode.value = hash;
-        form.buttonCode.click();
-    }
-
     document
         .getElementById('assemble-template')
         .addEventListener('change', function () {
@@ -54,16 +49,33 @@
     inputUrl.setAttribute('placeholder', 'コード付きURL');
 
     const inputInsertTarget = document.getElementById('infoCode');
+
     inputInsertTarget.parentNode.appendChild(inputUrl);
 
     document
         .getElementsByClassName('genericButton')[0]
         .addEventListener('click', () => {
-            document.getElementById('hash-url').value =
-                `${location.href.replace(location.search, '')}?${document.getElementById('editCode').value}`;
+            setURL('editCode');
         });
+
+    document.querySelectorAll('select.partsList').forEach((e) => {
+        e.addEventListener('change', () => {
+            setURL('infoCode');
+        });
+    });
 
     if (location.search) {
         loadHash(formControl, location.search.replace('?', ''));
+    }
+
+    function loadHash(form, hash) {
+        form.editCode.value = hash;
+        form.buttonCode.click();
+    }
+
+    function setURL(targetId) {
+        const targetCode = document.getElementById(targetId);
+        document.getElementById('hash-url').value =
+            `${location.href.replace(location.search, '')}?${targetCode.value}`;
     }
 })();
